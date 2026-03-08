@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="css/base.css" />
   </head>
   <body>
+    <header id="Menu">
+      <button class="tab-btn active" data-target="cuentas">Cuentas</button>
+      <button class="tab-btn" data-target="inicio">Inicio</button>
+      <button class="tab-btn" data-target="historial">Historial</button>
+    </header>
     <div class="container">
-      <header id="Menu">
-        <button>Inicio</button>
-        <button>Cuentas</button>
-        <button>Historial</button>
-      </header>
       <section id="Carrito">
         <h2>Pedido Actual</h2>
         <main>
@@ -47,6 +47,27 @@
     </div>
 
     <script>
+      const buttons = document.querySelectorAll(".tab-btn");
+      const vistas = document.querySelectorAll(".vista");
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          // Quitar active de todos los botones
+          buttons.forEach((btn) => btn.classList.remove("active"));
+          // Quitar active de todas las vistas
+          vistas.forEach((vista) => vista.classList.remove("active"));
+
+          // Activar el botón clicado
+          button.classList.add("active");
+
+          // Mostrar la vista correspondiente
+          const targetId = button.getAttribute("data-target");
+          const targetVista = document.getElementById(`vista-${targetId}`);
+          if (targetVista) {
+            targetVista.classList.add("active");
+          }
+        });
+      });
       // Array de productos disponibles
       const productos = [
         { producto: "Coca Cola", precio: 190 },
