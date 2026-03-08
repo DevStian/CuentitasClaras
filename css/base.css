@@ -236,3 +236,13 @@ body {
   border-bottom: 2px solid #cbd5e1;
   font-size: 20px;
 }
+
+/* Definir anchos de columna */
+.tabla-carrito th:nth-child(1),
+.tabla-carrito td:nth-child(1) { width: 40%; }
+.tabla-carrito th:nth-child(2),
+.tabla-carrito td:nth-child(2) { width: 20%; }
+.tabla-carrito th:nth-child(3),
+.tabla-carrito td:nth-child(3) { width: 20%; }
+.tabla-carrito th:nth-child(4),
+.tabla-carrito td:nth-child(4) { width: 20%; }
