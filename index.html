@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/base.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header id="Menu">
+        <button>Inicio</button>
+        <button>Cuentas</button>
+        <button>Historial</button>
+      </header>
+      <section id="Carrito">
+        <h2>Pedido Actual</h2>
+        <main>
+          <table class="tabla-carrito" id="tabla-carrito">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody id="carrito-body">
+              <!-- Aquí se insertarán las filas dinámicamente -->
+            </tbody>
+          </table>
+        </main>
+        <footer>
+          <span>Total: </span> <span id="Total">$0.00</span>
+          <button class="btn btn-secondary">Guardar</button>
+          <button class="btn btn-warning" onclick="limpiarCarrito()">
+            Borrar
+          </button>
+        </footer>
+      </section>
+      <section id="Algo">
+        <h2>Productos</h2>
+        <div id="productos-lista">
+          <!-- Aquí se cargarán los productos -->
+        </div>
+      </section>
+    </div>
+
+    <script>
+      // Array de productos disponibles
+      const productos = [
+        { producto: "Coca Cola", precio: 190 },
+        { producto: "Coca Zero", precio: 190 },
+        { producto: "Sprite", precio: 190 },
+        { producto: "Monster Energy", precio: 260 },
+        { producto: "Agua", precio: 170 },
+        { producto: "Nescafe", precio: 170 },
+        { producto: "Burger Simple", precio: 260 },
+        { producto: "Burger Completa", precio: 320 },
+        { producto: "Pancho", precio: 160 },
+        { producto: "Scones", precio: 210 },
+        { producto: "Bon o Bon x3", precio: 70 },
+        { producto: "Cofler", precio: 190 },
+        { producto: "Mogul pie", precio: 130 },
+        { producto: "Chicle", precio: 60 },
+        { producto: "Menthoplus", precio: 60 },
+        { producto: "Turron", precio: 50 },
+        { producto: "Alfajor Triple", precio: 100 },
+        { producto: "Alfajor Simple", precio: 60 },
+        { producto: "Porteñitas", precio: 140 },
+        { producto: "Opera", precio: 140 },
+        { producto: "Rellena", precio: 140 },
+        { producto: "Papas", precio: 160 },
+        { producto: "Kesitas", precio: 160 },
+        { producto: "Saladix", precio: 160 },
+        { producto: "Pop", precio: 160 },
+        { producto: "Pizza", precio: 900 },
+        { producto: "Campeon Gourmet", precio: 2500 },
+        { producto: "Picada Carbonara", precio: 2300 },
+        { producto: "Sweet Time", precio: 1000 },
+        { producto: "Cervezas 0.0%", precio: 200 },
+        { producto: "Tubo Mogul", precio: 60 },
+        { producto: "Waffle", precio: 160 },
+        { producto: "Papas", precio: 160 },
+        { producto: "Papas tubo", precio: 300 },
+      ];
+
+      // Carrito de compras (array de objetos)
+      let carrito = [];
+
+      // Función para crear una línea de tabla (fila)
+      const crearLineaTabla = (producto, cantidad = 1) => {
+        const precio = producto.precio;
+        const subtotal = precio * cantidad;
+
+        return `
+          <tr data-producto="${producto.producto}">
+            <td>${producto.producto}</td>
+            <td>
+              <button class="btn-circle btn-minus" onclick="cambiarCantidad('${producto.producto}', -1)">-</button>
+              <span class="cantidad">${cantidad}</span>
+              <button class="btn-circle btn-plus" onclick="cambiarCantidad('${producto.producto}', 1)">+</button>
+            </td>
+            <td>$${precio.toFixed(2)}</td>
+            <td>$${subtotal.toFixed(2)}</td>
+          </tr>
+        `;
+      };
+
+      // Función para actualizar toda la tabla del carrito
+      const actualizarTabla = () => {
+        const tbody = document.getElementById("carrito-body");
+        let total = 0;
+
+        if (carrito.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="5" style="text-align: center; padding: 20px;">El carrito está vacío</td></tr>';
+        } else {
+          let filas = "";
+          carrito.forEach((item) => {
+            filas += crearLineaTabla(
+              { producto: item.producto, precio: item.precio },
+              item.cantidad,
+            );
+            total += item.precio * item.cantidad;
+          });
+          tbody.innerHTML = filas;
+        }
+
+        // Actualizar el total
+        document.getElementById("Total").textContent = `$${total.toFixed(2)}`;
+      };
+
+      // Función para agregar un producto al carrito
+      const agregarAlCarrito = (producto) => {
+        const existente = carrito.find(
+          (item) => item.producto === producto.producto,
+        );
+
+        if (existente) {
+          existente.cantidad += 1;
+        } else {
+          carrito.push({
+            producto: producto.producto,
+            precio: producto.precio,
+            cantidad: 1,
+          });
+        }
+
+        actualizarTabla();
+      };
+
+      // Función para cambiar la cantidad de un producto
+      const cambiarCantidad = (nombreProducto, cambio) => {
+        const item = carrito.find((item) => item.producto === nombreProducto);
+
+        if (item) {
+          item.cantidad += cambio;
+
+          if (item.cantidad <= 0) {
+            // Eliminar si la cantidad es 0 o negativa
+            carrito = carrito.filter(
+              (item) => item.producto !== nombreProducto,
+            );
+          }
+
+          actualizarTabla();
+        }
+      };
+
+      // Función para eliminar un producto del carrito
+      const eliminarProducto = (nombreProducto) => {
+        carrito = carrito.filter((item) => item.producto !== nombreProducto);
+        actualizarTabla();
+      };
+
+      // Función para limpiar todo el carrito
+      const limpiarCarrito = () => {
+        carrito = [];
+        actualizarTabla();
+      };
+
+      // Función para cargar los productos en la sección "Algo"
+      const cargarProductos = () => {
+        const contenedor = document.getElementById("productos-lista");
+
+        productos.forEach((prod) => {
+          const div = document.createElement("div");
+          div.className = "producto-item";
+
+          div.innerHTML = `
+            <h4>${prod.producto}</h4>
+            <button class="btn btn-success" onclick="agregarAlCarrito(${JSON.stringify(prod).replace(/"/g, "&quot;")})">
+              $${prod.precio.toFixed(2)}
+            </button>
+          `;
+
+          contenedor.appendChild(div);
+        });
+      };
+
+      // Inicializar la página
+      document.addEventListener("DOMContentLoaded", () => {
+        cargarProductos();
+        actualizarTabla();
+      });
+    </script>
+  </body>
+</html>

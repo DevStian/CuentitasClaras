@@ -1,0 +1,238 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* box-shadow: 0 0 0 1px inset blue; */
+}
+
+html {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 16px;
+}
+
+body {
+  max-width: 100vw;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  flex-direction: column; /* Cambiado de 'column' a 'row' */
+  padding: 2px;
+  height: 100vh;
+  max-height: 100%;
+  gap: 5px;
+}
+
+.container section {
+  background: white;
+  padding: 4px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  box-shadow: 4px 4px 5px 0 #3333335c;
+  overflow: scroll;
+  flex: 1;
+}
+.container section h2 {
+  font-size: 1.2rem;
+  padding: 4px 10px;
+  color: #1e2a3a;
+}
+
+#Menu {
+  display: flex;
+  gap: 10px;
+  padding: 4px 10px 0px 10px;
+  max-height: 32px;
+}
+
+#Menu button {
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1e2a3a;
+  padding: 0.5rem 1rem;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+#Menu button:active {
+  color: #1e2a3a;
+  text-decoration: underline;
+}
+
+.active {
+  color: #1e2a3a;
+  text-decoration: underline;
+}
+
+.btn {
+  min-width: 100px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: bold;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  border: none;
+  border-radius: 4px;
+  background-color: transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition:
+    background 0.15s,
+    transform 0.1s,
+    box-shadow 0.1;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-scondary {
+  background-color: #eef2f6;
+  border: 1px solid;
+}
+
+/* secundario (gris claro) */
+.btn-secondary {
+  background: #eef2f6;
+  border: 1px solid #bdc9d6;
+  color: #1e2a3a;
+}
+.btn-secondary:hover {
+  background: #e2e8f0;
+  border-color: #9aa9b9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* warning / borrar (rojo) */
+.btn-warning {
+  background: #dc3545;
+  color: white;
+  border: 1px solid #b22234;
+}
+.btn-warning:hover {
+  background: #c82333;
+  border-color: #9c1f2b;
+}
+.btn-warning:active {
+  background: #b21a2a;
+}
+
+/* success / guardar (verde) – class correcta "btn-success" */
+.btn-success {
+  background: #28a745;
+  color: white;
+  border: 1px solid #1e7e34;
+}
+.btn-success:hover {
+  background: #218838;
+}
+.btn-success:active {
+  background: #1e7e34;
+}
+
+/* Botones circulares */
+.btn-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-circle:active {
+  transform: scale(0.92);
+}
+
+/* Botón plus (verde) */
+.btn-plus {
+  color: #28a745;
+  border: 1px solid #28a745;
+}
+
+.btn-plus:hover {
+  background-color: #218838;
+  color: white;
+}
+
+/* Botón minus (amarillo/naranja) */
+.btn-minus {
+  color: #b22234;
+  border: 1px solid #b22234;
+}
+
+.btn-minus:hover {
+  background-color: #b22234;
+  color: white;
+}
+
+#Carrito {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 5px;
+}
+
+/* Ajuste para que el main maneje correctamente el scroll */
+#Carrito main {
+  border: 1px solid #eef2f6;
+  box-shadow: inset 0 0 3px 0 #3333335c;
+  border-radius: 4px;
+  overflow-y: auto;
+  padding: 0;  /* Cambiado de 5px a 0 para que la tabla ocupe todo el ancho */
+  max-height: 100%;
+}
+
+#Carrito footer {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.item-list {
+  padding: 0.5rem 0.3rem;
+  border-bottom: 1px dashed #cbd5e1;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+
+/* Estilos para la tabla del carrito */
+.tabla-carrito {
+  width: 100%;
+  /* border-collapse: collapse; */
+  font-size: 0.95rem;
+}
+
+.tabla-carrito th {
+  background-color: #eef2f6;
+  padding: 2px 10px;
+  text-align: left;
+  border-bottom: 2px solid #bdc9d6;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tabla-carrito td {
+  padding: 4px 10px;
+  border-bottom: 2px dashed #cbd5e1;
+}
+
+.producto-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 2px solid #cbd5e1;
+  font-size: 20px;
+}
