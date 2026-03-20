@@ -13,17 +13,17 @@ html {
 }
 
 body {
-  height: 100vh;           /* en lugar de max-height */
+  height: 100vh; /* en lugar de max-height */
   display: flex;
   flex-direction: column;
-  margin: 0;               /* ya lo tienes, pero asegúralo */
+  margin: 0; /* ya lo tienes, pero asegúralo */
 }
 
 .container {
-  flex: 1;                 /* toma el espacio restante */
-  min-height: 0;           /* importante para que pueda encoger y permitir scroll interno */
+  flex: 1; /* toma el espacio restante */
+  min-height: 0; /* importante para que pueda encoger y permitir scroll interno */
   display: flex;
-  flex-direction: column;  /* si quieres que sus hijos se apilen verticalmente */
+  flex-direction: column; /* si quieres que sus hijos se apilen verticalmente */
   gap: 5px;
   padding: 2px;
 }
@@ -32,16 +32,19 @@ body {
   flex: 1;
   overflow: scroll;
   background: white;
-  padding: 4px;
   border-radius: 8px;
   border: 2px solid #ddd;
   box-shadow: 4px 4px 5px 0 #3333335c;
+
 }
+
 .container section h2 {
   font-size: 1.2rem;
-  padding: 4px 10px;
-  color: #1e2a3a;
+  padding: 8px 14px 4px;
+  color: #bdc9d6;
+  background-color: #1e2a3a;
 }
+
 
 #Menu {
   display: flex;
@@ -59,7 +62,9 @@ body {
   padding: 0.5rem 1rem;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  transition: background-color 0.15s, color 0.15s;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
 }
 
 #Menu button:active {
@@ -178,7 +183,6 @@ body {
 #Carrito {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 5px;
 }
 
 /* Ajuste para que el main maneje correctamente el scroll */
@@ -187,7 +191,7 @@ body {
   box-shadow: inset 0 0 3px 0 #3333335c;
   border-radius: 4px;
   overflow-y: auto;
-  padding: 0;  /* Cambiado de 5px a 0 para que la tabla ocupe todo el ancho */
+  padding: 0; /* Cambiado de 5px a 0 para que la tabla ocupe todo el ancho */
   max-height: 100%;
 }
 
@@ -195,7 +199,18 @@ body {
   display: grid;
   grid-template-columns: auto 1fr auto auto;
   gap: 10px;
-  align-items: end;
+  align-items: center;
+  padding: 4px 10px;
+}
+
+#Carrito footer span {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+#Carrito footer #Total {
+  font-size: 1.4rem;
+  text-align: end;
 }
 
 .item-list {
@@ -205,11 +220,10 @@ body {
   color: #0f172a;
 }
 
-
 /* Estilos para la tabla del carrito */
 .tabla-carrito {
   width: 100%;
-  /* border-collapse: collapse; */
+  border-collapse: collapse;
   font-size: 0.95rem;
 }
 
@@ -228,6 +242,10 @@ body {
   border-bottom: 2px dashed #cbd5e1;
 }
 
+.tabla-carrito tbody tr:active {
+  background-color: #bdc9d6;
+  border: #bdc9d6;
+}
 .producto-item {
   display: flex;
   justify-content: space-between;
@@ -239,10 +257,19 @@ body {
 
 /* Definir anchos de columna */
 .tabla-carrito th:nth-child(1),
-.tabla-carrito td:nth-child(1) { width: 40%; }
+.tabla-carrito td:nth-child(1) {
+  width: 40%;
+}
 .tabla-carrito th:nth-child(2),
-.tabla-carrito td:nth-child(2) { width: 20%; }
+.tabla-carrito td:nth-child(2) {
+  width: 20%;
+  text-align: center;
+}
 .tabla-carrito th:nth-child(3),
-.tabla-carrito td:nth-child(3) { width: 20%; }
+.tabla-carrito td:nth-child(3) {
+  width: 20%;
+}
 .tabla-carrito th:nth-child(4),
-.tabla-carrito td:nth-child(4) { width: 20%; }
+.tabla-carrito td:nth-child(4) {
+  width: 20%;
+}

@@ -34,15 +34,15 @@
           <span>Total: </span> <span id="Total">$0.00</span>
           <button class="btn btn-secondary">Guardar</button>
           <button class="btn btn-warning" onclick="limpiarCarrito()">
-            Borrar
+            Limpiar
           </button>
         </footer>
       </section>
       <section id="Algo">
         <h2>Productos</h2>
-        <div id="productos-lista">
+        <main id="productos-lista">
           <!-- Aquí se cargarán los productos -->
-        </div>
+        </main>
       </section>
     </div>
 
@@ -115,12 +115,12 @@
         const subtotal = precio * cantidad;
 
         return `
-          <tr data-producto="${producto.producto}">
-            <td>${producto.producto}</td>
+          <tr data-producto="${producto.producto}" onclick="cambiarCantidad('${producto.producto}', -1)">
             <td>
-              <button class="btn-circle btn-minus" onclick="cambiarCantidad('${producto.producto}', -1)">-</button>
+              ${producto.producto} 
+            </td>
+            <td>
               <span class="cantidad">${cantidad}</span>
-              <button class="btn-circle btn-plus" onclick="cambiarCantidad('${producto.producto}', 1)">+</button>
             </td>
             <td>$${precio.toFixed(2)}</td>
             <td>$${subtotal.toFixed(2)}</td>
@@ -135,7 +135,7 @@
 
         if (carrito.length === 0) {
           tbody.innerHTML =
-            '<tr><td colspan="5" style="text-align: center; padding: 20px;">El carrito está vacío</td></tr>';
+            '<tr><td colspan="5" style="text-align: center;">El carrito está vacío</td></tr>';
         } else {
           let filas = "";
           carrito.forEach((item) => {
