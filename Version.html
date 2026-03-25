@@ -237,12 +237,16 @@
 
       #Carrito footer p {
         font-weight: 700;
-        font-size: 1.5rem;
-        padding: 0 5px;
+        font-size: 0.9rem;
         align-self: end;
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: end;
+        color: #1e293b;
+      }
+
+      #Carrito footer p span {
+        font-size: 1.4rem;
       }
 
       #Lista-Productos {
@@ -265,11 +269,16 @@
         font-size: 1.7rem;
       }
 
+      @media (max-width: 480px) {
+        .producto-item h4 {
+          font-size: 1.5rem;
+        }
+      }
+
       /* ===== ESTILOS DE TABLA ===== */
       .tabla-carrito {
         width: 100%;
         border-collapse: collapse;
-        font-size: 1rem;
         background: white;
         overflow: hidden;
       }
@@ -279,18 +288,16 @@
       }
 
       .tabla-carrito th {
-        padding: 5px 10px;
-        font-size: 1.5rem;
+        padding: 3px 8px;
         text-align: left;
-        font-weight: 600;
-        color: #475569;
+        font-weight: bold;
+        color: #202732;
         font-size: 0.85rem;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
       }
 
       .tabla-carrito td {
-        padding: 8px 10px;
+        padding: 3px 8px;
         border-bottom: 1px solid #e2e8f0;
         color: #1e293b;
         vertical-align: middle;
@@ -318,10 +325,7 @@
           transform: translateX(2px);
         }
       }
-      .tabla-carrito thead tr th:first-child,
-      .tabla-carrito td:first-child {
-        min-width: 170px;
-      }
+
       /* Estilos para celdas específicas */
       .tabla-carrito td:first-child,
       .tabla-carrito td:last-child {
@@ -636,6 +640,7 @@
 
         console.log("✅ Aplicación inicializada");
       });
+      
     </script>
   </body>
 </html>
