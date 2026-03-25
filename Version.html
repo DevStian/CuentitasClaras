@@ -6,6 +6,12 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=yes"
     />
+    <!-- Favicon personalizado con carrito -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232d5a2c' rx='20'/%3E%3Ctext x='50' y='70' font-size='55' font-weight='bold' text-anchor='middle' fill='white' font-family='monospace'%3ECC%3C/text%3E%3C/svg%3E"
+    />
     <title>Scrollable Sections | Fixed Layout</title>
     <style>
       * {
@@ -258,6 +264,75 @@
       .producto-item h4 {
         font-size: 1.7rem;
       }
+
+      /* ===== ESTILOS DE TABLA ===== */
+      .tabla-carrito {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 1rem;
+        background: white;
+        overflow: hidden;
+      }
+
+      .tabla-carrito thead {
+        background: #cdd2d6;
+      }
+
+      .tabla-carrito th {
+        padding: 5px 10px;
+        font-size: 1.5rem;
+        text-align: left;
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .tabla-carrito td {
+        padding: 8px 10px;
+        border-bottom: 1px solid #e2e8f0;
+        color: #1e293b;
+        vertical-align: middle;
+        font-size: 1rem;
+      }
+
+      /* Filas con efecto active (como botones) */
+      .tabla-carrito tbody tr {
+        transition: all 0.1s ease;
+        cursor: pointer;
+        border-bottom: 2px dashed #cbd5e1;
+      }
+
+      /* Active - efecto al hacer clic */
+      .tabla-carrito tbody tr:active {
+        transform: scale(0.98);
+        background: #f1f5f9;
+        box-shadow: inset 0 0 0 2px #cbd5e1;
+      }
+
+      /* Hover solo en dispositivos con mouse */
+      @media (hover: hover) and (pointer: fine) {
+        .tabla-carrito tbody tr:hover {
+          background: #f8fafc;
+          transform: translateX(2px);
+        }
+      }
+      .tabla-carrito thead tr th:first-child,
+      .tabla-carrito td:first-child {
+        min-width: 170px;
+      }
+      /* Estilos para celdas específicas */
+      .tabla-carrito td:first-child,
+      .tabla-carrito td:last-child {
+        font-weight: 600;
+      }
+
+      .tabla-carrito td:nth-child(2),
+      .tabla-carrito td:nth-child(3),
+      .tabla-carrito td:nth-child(4) {
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -265,11 +340,27 @@
       <!-- SECTION 1: long text content that requires scrolling inside main -->
       <section id="Carrito">
         <h2>Carrito</h2>
-        <main></main>
+        <main>
+          <table class="tabla-carrito" id="tabla-carrito">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody id="carrito-body">
+              <!-- Aquí se insertarán las filas dinámicamente -->
+            </tbody>
+          </table>
+        </main>
         <footer>
-          <p>Total : <span>$1450.0</span></p>
-          <button class="btn btn-secondary">Guardar</button>
-          <button class="btn btn-warning">Limpiar</button>
+          <p>Total : <span id="TotalCarrito">$1450.0</span></p>
+          <button class="btn btn-secondary" onclick="guardarCarrito()">Guardar</button>
+          <button class="btn btn-warning" onclick="limpiarTabla()">
+            Limpiar
+          </button>
         </footer>
       </section>
 
@@ -331,7 +422,9 @@
     </main>
     <script src="scripts/lista_productos.js"></script>
     <script>
-      const crearElementoDeLista = (prod) => {
+      const current_carrito = {};
+
+      const crearElementoDeLista = (prod, index) => {
         const div = document.createElement("div");
         div.classList.add("producto-item");
 
@@ -342,6 +435,12 @@
         button.classList.add("btn", "btn-success");
         button.textContent = `$${prod.precio.toFixed(2)}`;
 
+        // Agregar onclick que llama a agregarAlCarrito con el índice
+        button.onclick = (e) => {
+          e.stopPropagation(); // Evitar que el evento burbujee
+          agregarAlCarrito(index);
+        };
+
         div.appendChild(nameProduct);
         div.appendChild(button);
 
@@ -349,19 +448,15 @@
       };
 
       const agregarElementoALista = () => {
-        // Obtener la sección completa
         const seccionProductos = document.getElementById("Lista-Productos");
 
-        // Verificar que la sección exista
         if (!seccionProductos) {
           console.error("No se encontró la sección con id 'Lista-Productos'");
           return;
         }
 
-        // Buscar el MAIN dentro de la sección
         const mainContainer = seccionProductos.querySelector("main");
 
-        // Verificar que el main exista
         if (!mainContainer) {
           console.error(
             "No se encontró el elemento <main> dentro de la sección",
@@ -369,14 +464,178 @@
           return;
         }
 
-        // Agregar los productos al MAIN (no a la sección directamente)
-        productos.forEach((prod) => {
-          mainContainer.appendChild(crearElementoDeLista(prod));
+        // Agregar los productos al MAIN, pasando el índice
+        productos.forEach((prod, index) => {
+          mainContainer.appendChild(crearElementoDeLista(prod, index));
         });
       };
 
-      // Llamar a la función cuando sea necesario
-      agregarElementoALista();
+      // Función para crear una línea de carrito
+      const crearLineaCarrito = (producto, index) => {
+        const cantidad = 1;
+        const subtotal = producto.precio * cantidad;
+
+        const fila = document.createElement("tr");
+        fila.setAttribute("data-id", index);
+
+        // Agregar evento click a toda la fila
+        fila.onclick = () => decrementarCantidad(index);
+
+        fila.innerHTML = `
+                            <td class="producto-nombre">${producto.name}</td>
+                            <td class="producto-precio">$${producto.precio.toFixed(2)}</td>
+                            <td class="producto-cantidad">
+                                <span class="cantidad-valor">${cantidad}</span>
+                            </td>
+                            <td class="subtotal-valor">$${subtotal.toFixed(2)}</td>
+                         `;
+
+        return fila;
+      };
+
+      // Función para actualizar el total del carrito
+      const actualizarTotalCarrito = () => {
+        const totalSpan = document.getElementById("TotalCarrito");
+        if (!totalSpan) return;
+
+        const subtotales = document.querySelectorAll(".subtotal-valor");
+        let total = 0;
+
+        subtotales.forEach((subtotal) => {
+          const valor = parseFloat(subtotal.textContent.replace("$", ""));
+          if (!isNaN(valor)) total += valor;
+        });
+
+        totalSpan.textContent = `$${total.toFixed(2)}`;
+      };
+
+      // Función para actualizar una línea existente
+      const actualizarLineaCarrito = (fila, producto, aumento) => {
+        const cantidadSpan = fila.querySelector(".cantidad-valor");
+        let cantidad = parseInt(cantidadSpan.textContent);
+
+        cantidad = cantidad + aumento;
+
+        // Si la cantidad llega a 0, eliminar la fila
+        if (cantidad <= 0) {
+          fila.remove();
+          actualizarTotalCarrito();
+          return;
+        }
+
+        cantidadSpan.textContent = cantidad;
+
+        const subtotal = producto.precio * cantidad;
+        fila.querySelector(".subtotal-valor").textContent =
+          `$${subtotal.toFixed(2)}`;
+
+        // Actualizar total después de modificar la línea
+        actualizarTotalCarrito();
+      };
+
+      // Función para decrementar cantidad (click en la línea)
+      const decrementarCantidad = (index) => {
+        const carritoBody = document.getElementById("carrito-body");
+        if (!carritoBody) return;
+
+        const lineaCarrito = carritoBody.querySelector(`[data-id="${index}"]`);
+
+        if (lineaCarrito) {
+          actualizarLineaCarrito(lineaCarrito, productos[index], -1);
+        }
+      };
+
+      // Función para agregar al carrito
+      const agregarAlCarrito = (index) => {
+        const carritoBody = document.getElementById("carrito-body");
+        if (!carritoBody) return;
+
+        const lineaCarrito = carritoBody.querySelector(`[data-id="${index}"]`);
+
+        if (!lineaCarrito) {
+          const itemElement = crearLineaCarrito(productos[index], index);
+          carritoBody.appendChild(itemElement);
+        } else {
+          actualizarLineaCarrito(lineaCarrito, productos[index], 1);
+        }
+
+        // Actualizar total después de agregar
+        actualizarTotalCarrito();
+      };
+
+      // Función para guardar el carrito (imprime en consola como JSON)
+      const guardarCarrito = () => {
+        const carritoBody = document.getElementById("carrito-body");
+        if (!carritoBody) return;
+
+        const filas = carritoBody.querySelectorAll("tr");
+        const productosGuardar = [];
+
+        filas.forEach((fila) => {
+          const id = fila.getAttribute("data-id");
+          const nombre = fila.querySelector(".producto-nombre")?.textContent;
+          const precioTexto =
+            fila.querySelector(".producto-precio")?.textContent;
+          const cantidad = parseInt(
+            fila.querySelector(".cantidad-valor")?.textContent,
+          );
+          const subtotalTexto =
+            fila.querySelector(".subtotal-valor")?.textContent;
+
+          if (nombre && precioTexto && cantidad) {
+            const precio = parseFloat(precioTexto.replace("$", ""));
+            const subtotal = parseFloat(subtotalTexto.replace("$", ""));
+
+            productosGuardar.push({
+              id: id ? parseInt(id) : null,
+              nombre: nombre,
+              precio: precio,
+              cantidad: cantidad,
+              subtotal: subtotal,
+            });
+          }
+        });
+
+        if (productosGuardar.length === 0) {
+          console.log("🛒 Carrito vacío");
+        } else {
+          console.log("📦 Carrito guardado:");
+          console.log(JSON.stringify(productosGuardar, null, 2));
+        }
+
+        // Limpiar la tabla después de guardar
+        limpiarTabla();
+      };
+
+      // Función para limpiar la tabla
+      const limpiarTabla = () => {
+        const carritoBody = document.getElementById("carrito-body");
+        if (carritoBody) {
+          carritoBody.innerHTML = "";
+        }
+
+        // Limpiar current_carrito
+        for (let key in current_carrito) {
+          delete current_carrito[key];
+        }
+
+        // Actualizar total a 0
+        actualizarTotalCarrito();
+        console.log("🧹 Carrito limpiado");
+      };
+
+      // Inicializar después de que el DOM esté cargado
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("🚀 DOM cargado - Inicializando");
+
+        // Limpiar tabla por las dudas
+        limpiarTabla();
+
+        // Agregar productos a la lista
+        agregarElementoALista();
+
+        console.log("✅ Aplicación inicializada");
+      });
     </script>
   </body>
 </html>
