@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>Scrollable Sections | Fixed Layout</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        /* outline: 0 0 0 1px blue;  /* removed persistent blue outline for cleaner look — kept for debugging if needed, but commented */
+      }
+
+      html {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f7fb;    /* subtle background for better visual comfort */
+        color: #1e293b;
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      /* main container — exact full viewport height, no expansion beyond screen */
+      .container-section {
+        height: 100vh;          /* strict viewport height */
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;       /* prevents any global scroll on the wrapper */
+        background-color: white;
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.05); /* optional subtle boundary */
+      }
+
+      /* each section occupies equal flex space, but remains contained */
+      .container-section section {
+        flex: 1;
+        display: grid;
+        grid-template-rows: auto 1fr auto;  /* header (title) + main (scrollable) + footer */
+        min-height: 0;          /* CRITICAL: allows flex children to shrink below content height */
+        overflow: hidden;
+        background: white;
+        border-bottom: 1px solid #e2e8f0;   /* subtle separator between sections */
+      }
+
+      /* last section removes extra border for cleaner UI */
+      .container-section section:last-child {
+        border-bottom: none;
+      }
+
+      /* section heading styles */
+      .container-section section h2 {
+        padding: 1rem 1.5rem 0.5rem 1.5rem;
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: -0.2px;
+        background: white;
+        color: #0f172a;
+        border-bottom: 2px solid #eef2ff;
+        margin: 0;
+        flex-shrink: 0;
+      }
+
+      /* MAIN CONTENT — scrollable area, does NOT expand section height */
+      .container-section section main {
+        overflow-y: auto;       /* vertical scroll when content overflows */
+        overflow-x: hidden;
+        padding: 1.25rem 1.5rem;
+        background-color: #ffffff;
+        scroll-behavior: smooth;
+        /* ensures smooth inner scroll without pushing parent layout */
+        min-height: 0;          /* essential for flex/grid children to respect overflow */
+      }
+
+      /* Custom scrollbar for better UX (optional, but keeps modern look) */
+      .container-section section main::-webkit-scrollbar {
+        width: 6px;
+      }
+      .container-section section main::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 8px;
+      }
+      .container-section section main::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 8px;
+      }
+      .container-section section main::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+
+      /* footer styles — fixed within section, never expands */
+      .container-section section footer {
+        background: #f8fafc;
+        padding: 0.85rem 1.5rem;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+        flex-shrink: 0;
+        font-size: 0.9rem;
+      }
+
+      .container-section section footer p {
+        margin: 0;
+        color: #475569;
+        font-weight: 450;
+        flex: 1;
+      }
+
+      .container-section section footer button {
+        background-color: #3b82f6;
+        border: none;
+        color: white;
+        font-weight: 500;
+        padding: 0.4rem 1.2rem;
+        border-radius: 40px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.1s;
+        font-family: inherit;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      }
+
+      .container-section section footer button:last-child {
+        background-color: #64748b;
+      }
+
+      .container-section section footer button:hover {
+        background-color: #2563eb;
+        transform: scale(0.97);
+      }
+
+      .container-section section footer button:last-child:hover {
+        background-color: #475569;
+      }
+
+      /* small responsive tweak for very narrow screens */
+      @media (max-width: 480px) {
+        .container-section section h2 {
+          padding: 0.75rem 1rem 0.4rem 1rem;
+          font-size: 1.2rem;
+        }
+        .container-section section main {
+          padding: 1rem;
+        }
+        .container-section section footer {
+          padding: 0.6rem 1rem;
+          gap: 0.6rem;
+        }
+        .container-section section footer button {
+          padding: 0.3rem 1rem;
+        }
+      }
+
+      /* Extra demo style to highlight the scrollable behavior: add visual indicator that scrolling works */
+      .container-section section main:focus {
+        outline: none;
+      }
+
+      /* For debugging layout: ensures no external scroll appears on body */
+      body {
+        overflow: hidden;       /* prevents any body-level scrollbar */
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* consistent paragraph styling inside scrollable main */
+      .container-section section main p {
+        margin-bottom: 1rem;
+        color: #334155;
+      }
+
+      /* Any direct text (not wrapped in p) also gets proper spacing */
+      .container-section section main {
+        font-size: 0.98rem;
+        line-height: 1.55;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container-section">
+      <!-- SECTION 1: long text content that requires scrolling inside main -->
+      <section>
+        <h2>📘 Sección 1: Narrativa extensa</h2>
+        <main>
+          <p><strong>✨ Este contenido es desplazable (scroll) sin expandir la sección.</strong> El bloque principal mantiene altura fija dentro de la ventana y se desplaza independientemente. Prueba haciendo scroll aquí — el título y el pie permanecen anclados.</p>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla voluptas ex assumenda earum placeat dignissimos labore ipsum nisi at ipsa similique cupiditate dolore, beatae, nobis ullam facilis provident quia culpa! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus rerum, veritatis vero iure nesciunt quidem nihil? Nostrum non voluptates eligendi, vitae quas magni quibusdam nihil est repudiandae cupiditate consectetur perspiciatis?</p>
+          <p>Ex ipsa iste soluta dolorum est ad voluptates consectetur id laborum nesciunt, repellendus doloremque quaerat illum cum, eos eveniet. Perspiciatis saepe doloremque mollitia exercitationem quod natus quaerat, fuga eligendi officiis! Beatae nostrum quod asperiores autem quisquam perspiciatis provident possimus laudantium? Distinctio unde quae sed quasi aut! Asperiores, nostrum eveniet. Nam distinctio, optio maiores omnis fuga sint. Esse quo animi corrupti.</p>
+          <p>Adipisci quo impedit odit mollitia soluta cumque at omnis, earum labore ipsa numquam porro ab natus explicabo rerum nihil reiciendis dolor laborum exercitationem cupiditate consequuntur accusamus possimus. Laudantium, dolore aspernatur. Quisquam, dolorum. Repellat nemo aliquid quibusdam amet commodi cumque aperiam aliquam vero adipisci itaque, unde ipsum libero reiciendis quo sunt. Consequuntur illo et velit error nihil aliquam quo tenetur tempora.</p>
+          <p>Porro asperiores officia magni enim expedita molestiae earum ab? Asperiores, harum ab! Cum magni reprehenderit fugit, quisquam, nam aliquam neque in nostrum doloribus esse sint nulla repellat molestias at odio! Dolorem quibusdam minus quis, accusantium excepturi natus culpa modi non eaque facere ad magni voluptatibus voluptatem! Commodi temporibus facere blanditiis nostrum veniam deleniti inventore pariatur, quis doloribus dolores iste explicabo.</p>
+          <p>Amet excepturi laudantium adipisci hic et natus ipsam vel. Error consectetur accusamus, itaque fuga laboriosam, aspernatur officiis commodi temporibus recusandae quibusdam dolores impedit aut neque blanditiis? Molestiae tenetur aliquam a? Quidem iure perspiciatis, culpa consectetur quis recusandae sed iusto quas in, animi id aliquam numquam porro quia laudantium explicabo nulla doloribus placeat. Rem quia officia qui eos eius, possimus aliquam.</p>
+          <p>Dolore id beatae est nostrum obcaecati exercitationem corporis placeat architecto, voluptas esse, aliquam explicabo, repellendus vero soluta quam fugit error eos sit. Qui pariatur ab suscipit accusantium et at sapiente. Possimus doloremque assumenda dolores neque, qui nulla adipisci numquam animi deleniti tempore. Numquam nam tempora corporis praesentium reiciendis fugiat! Officia ut autem necessitatibus provident laboriosam at ullam eveniet dolorum in!</p>
+          <p>Fugiat ea deleniti odit quam nam tempora reprehenderit incidunt odio. Aut a ea, voluptas totam deserunt, nam iste repellat quae et blanditiis similique dolorem eveniet sint commodi tempore eius itaque! Necessitatibus quasi ea eos ad ratione fugiat incidunt, odio possimus nulla. Quisquam temporibus enim possimus provident reprehenderit aspernatur pariatur? Cum, quia. Cupiditate error, animi quasi rerum in ipsam iure dolorem!</p>
+          <p>Totam sit magnam vero porro eum, doloribus placeat aperiam ad, accusamus illo nobis, labore ea ipsa explicabo voluptates dolorem possimus temporibus dignissimos repellendus? Unde quaerat a hic aliquid rem perferendis? Minus non est a impedit enim dignissimos debitis nesciunt pariatur quam architecto unde minima doloremque mollitia illo animi laboriosam sed, repellat modi totam ducimus iure magni quos delectus. Ratione, excepturi?</p>
+          <p>Repellat laudantium officiis voluptatem ratione rem, enim ex laboriosam quam quis consequatur fugit dolores quos ipsam pariatur esse, iste ducimus, error eos possimus voluptatibus alias. Provident est vero omnis aliquid. Fugiat, temporibus inventore. Maiores beatae dolorum similique ipsam maxime? Corporis beatae iste doloremque aspernatur eveniet deleniti ab ex at, numquam id incidunt, impedit necessitatibus? Pariatur eius quis quia magnam totam?</p>
+          <p>Nemo quasi repudiandae maxime error unde doloribus praesentium ipsam adipisci rem architecto suscipit consequuntur nesciunt quas quibusdam expedita saepe, exercitationem quis at. Ad aut, quidem aperiam quisquam tenetur temporibus quibusdam? Id, dolorem. Vero iste officiis explicabo saepe unde assumenda maxime voluptates quia modi asperiores ipsam facere, in veniam dolorum dolorem, cumque nostrum sit qui veritatis ipsum animi! Asperiores, possimus dolor?</p>
+          <p>Corrupti expedita accusantium ex, placeat, animi earum totam vel minima recusandae in ratione a quaerat quas amet id praesentium inventore! Corrupti officiis iusto obcaecati ea ullam harum ipsum quia odio! ✨ <strong>Fin del contenido desplazable — el layout no se expandió, todo permanece dentro de la ventana.</strong></p>
+        </main>
+        <footer>
+          <p>📌 Pie de sección fijo — siempre visible sin scroll externo</p>
+          <button>Acción 1</button>
+          <button>Acción 2</button>
+        </footer>
+      </section>
+
+      <!-- SECTION 2: contenido corto, pero main conserva scroll si fuese necesario (sin expandir) -->
+      <section>
+        <h2>📌 Sección 2: Contenido breve</h2>
+        <main>
+          <p>✅ Esta sección también respeta el mismo patrón: <strong>el main tiene scroll interno si el contenido lo requiere</strong>. Pero aquí el texto es breve, por lo que no aparece scroll a menos que agregues más líneas. Sin embargo, la sección nunca se expande más allá del espacio disponible.</p>
+          <p>La estructura <code>grid-template-rows: auto 1fr auto</code> junto con <code>min-height: 0</code> y <code>overflow: hidden</code> en los contenedores padres garantiza que el área <code>&lt;main&gt;</code> se desplace sin aumentar la altura total de la ventana.</p>
+          <p>Puedes redimensionar la ventana del navegador y observar que ambas secciones se adaptan proporcionalmente, manteniendo el scroll solo dentro de cada bloque principal. El pie y título siempre permanecen visibles sin necesidad de scroll global.</p>
+          <p>✨ Ventaja: comportamiento de "tarjeta desplazable" perfecto para paneles, dashboards o interfaces donde cada sección debe ser autónoma y sin romper la altura de la pantalla.</p>
+          <p>Agreguemos algunas líneas adicionales para demostrar que si el contenido crece, el scroll aparece dentro del mismo main, pero ni el título ni el footer se mueven. Esta línea extra hace que el contenido sea ligeramente más alto para que puedas ver el scroll si tu pantalla es pequeña.</p>
+          <p>🖱️ <strong>Prueba de interacción:</strong> desplázate dentro del área de texto y verás que la otra sección permanece estática, sin afectar su contenido. Esto es ideal para formularios largos, descripciones extensas o feeds.</p>
+        </main>
+        <footer>
+          <p>⚡ Pie de la segunda sección — también fijo</p>
+          <button>Confirmar</button>
+          <button>Cancelar</button>
+        </footer>
+      </section>
+    </main>
+
+    <!-- no additional scripts needed — pure CSS ensures scroll behavior without expanding main content -->
+  </body>
+</html>
