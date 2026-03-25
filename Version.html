@@ -25,7 +25,6 @@
 
       .container-section {
         height: 100vh;
-        padding: 2px;
         display: flex;
         flex-direction: column;
         gap: 2px;
@@ -40,7 +39,6 @@
         grid-template-rows: auto 1fr auto;
         min-height: 0;
         overflow: hidden;
-        border-radius: 5px;
       }
 
       .container-section section h2 {
@@ -57,7 +55,6 @@
       .container-section section main {
         overflow-y: auto;
         overflow-x: hidden;
-        padding: 1.25rem 1.5rem;
         scroll-behavior: smooth;
         min-height: 0;
       }
@@ -89,9 +86,7 @@
           padding: 0.75rem 1rem 0.4rem 1rem;
           font-size: 1.2rem;
         }
-        .container-section section main {
-          padding: 1rem;
-        }
+
         .container-section section footer {
           padding: 0.6rem 1rem;
           gap: 0.6rem;
@@ -136,6 +131,11 @@
         transform: none;
       }
 
+      .btn:active,
+      .btn-little:active {
+        transform: scale(0.9);
+      }
+
       /* ===== VARIANTES DE COLOR ===== */
 
       /* Secondary - Gris */
@@ -163,16 +163,15 @@
         border-color: #7f1a1a;
       }
 
-      /* Success - Verde */
       .btn-success {
-        background: #10b981; /* Verde más moderno que #28a745 */
-        border-color: #059669;
+        background: #28a745;
+        border-color: #1e7e34;
         color: white;
       }
 
       .btn-success:active {
-        background: #047857;
-        border-color: #065f46;
+        background: #1e7e34;
+        border-color: #166b2a;
       }
 
       /* Primary - Azul (opcional, muy útil tenerlo) */
@@ -213,9 +212,9 @@
         }
 
         .btn-success:hover {
-          background: #059669;
-          border-color: #047857;
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+          background: #218838;
+          border-color: #1a6a2c;
+          box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25);
         }
 
         .btn-primary:hover {
@@ -229,24 +228,58 @@
           border-color: #94a3b8;
         }
       }
+
+      #Carrito footer p {
+        font-weight: 700;
+        font-size: 1.5rem;
+        padding: 0 5px;
+        align-self: end;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      #Lista-Productos {
+        grid-template-rows: auto 1fr;
+      }
+
+      .non-visible {
+        display: none !important;
+      }
+      .producto-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 10px 4px;
+        border-bottom: 2px solid #cbd5e1;
+      }
+      .producto-item button {
+        width: 115px;
+      }
+      .producto-item h4 {
+        font-size: 1.7rem;
+      }
     </style>
   </head>
   <body>
     <main class="container-section">
       <!-- SECTION 1: long text content that requires scrolling inside main -->
-      <section>
+      <section id="Carrito">
         <h2>🛒 Carrito</h2>
-        <main>
-        </main>
+        <main></main>
         <footer>
-          <p>Total : 1450.0</p>
+          <p>Total : <span>$1450.0</span></p>
           <button class="btn btn-secondary">Guardar</button>
           <button class="btn btn-warning">Limpiar</button>
         </footer>
       </section>
 
       <!-- SECTION 2: contenido corto, pero main conserva scroll si fuese necesario (sin expandir) -->
-      <section>
+      <section id="Lista-Productos">
+        <h2>Lista Productos</h2>
+        <main></main>
+      </section>
+
+      <section id="Historial" class="non-visible">
         <h2>📌 Sección 2: Contenido breve</h2>
         <main>
           <p>
@@ -296,7 +329,54 @@
         </footer>
       </section>
     </main>
+    <script src="/scripts/lista_productos.js"></script>
+    <script>
+      const crearElementoDeLista = (prod) => {
+        const div = document.createElement("div");
+        div.classList.add("producto-item");
 
-    <!-- no additional scripts needed — pure CSS ensures scroll behavior without expanding main content -->
+        const nameProduct = document.createElement("h4");
+        nameProduct.textContent = prod.name;
+
+        const button = document.createElement("button");
+        button.classList.add("btn", "btn-success");
+        button.textContent = `$${prod.precio.toFixed(2)}`;
+
+        div.appendChild(nameProduct);
+        div.appendChild(button);
+
+        return div;
+      };
+
+      const agregarElementoALista = () => {
+        // Obtener la sección completa
+        const seccionProductos = document.getElementById("Lista-Productos");
+
+        // Verificar que la sección exista
+        if (!seccionProductos) {
+          console.error("No se encontró la sección con id 'Lista-Productos'");
+          return;
+        }
+
+        // Buscar el MAIN dentro de la sección
+        const mainContainer = seccionProductos.querySelector("main");
+
+        // Verificar que el main exista
+        if (!mainContainer) {
+          console.error(
+            "No se encontró el elemento <main> dentro de la sección",
+          );
+          return;
+        }
+
+        // Agregar los productos al MAIN (no a la sección directamente)
+        productos.forEach((prod) => {
+          mainContainer.appendChild(crearElementoDeLista(prod));
+        });
+      };
+
+      // Llamar a la función cuando sea necesario
+      agregarElementoALista();
+    </script>
   </body>
 </html>
