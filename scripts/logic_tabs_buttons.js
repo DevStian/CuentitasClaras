@@ -11,12 +11,13 @@ buttons.forEach((button) => {
     // // Activar el botón clicado
     button.classList.add("active");
     if (button.textContent == "Cuentas") {
-        document.getElementById("Carrito").classList.remove("no-visible");
-        document.getElementById("Productos").classList.remove("no-visible");
+      document.getElementById("Carrito").classList.remove("no-visible");
+      document.getElementById("Productos").classList.remove("no-visible");
     } else if (button.textContent == "Historial") {
-        document.getElementById("Historial").classList.remove("no-visible");
+      cargarHistorial();
+      document.getElementById("Historial").classList.remove("no-visible");
     }
-    console.log(document.getElementById("Carrito"))
+
     // Mostrar la vista correspondiente
     const targetId = button.getAttribute("data-target");
     const targetVista = document.getElementById(`vista-${targetId}`);

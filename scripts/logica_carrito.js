@@ -108,8 +108,67 @@ const cargarProductos = () => {
   });
 };
 
+const GuardarVenta = () => {
+  if (carrito.length === 0) return;
+
+  const venta = {
+    id: Date.now(),
+    fecha: new Date().toLocaleString("es-AR"),
+    items: [...carrito], // copia para evitar referencias
+    total: document.getElementById("Total").textContent,
+  };
+
+  const historial = JSON.parse(localStorage.getItem("ventas") || "[]");
+  historial.push(venta);
+  localStorage.setItem("ventas", JSON.stringify(historial));
+
+  carrito = [];          // vaciar carrito
+  actualizarTabla();     // actualizar vista (esto ya limpia la tabla)
+};
+
+const cargarHistorial = () => {
+  const historial = JSON.parse(localStorage.getItem("ventas") || "[]");
+  const contenedor = document.getElementById("ListaHistorial");
+  contenedor.innerHTML = "";
+
+  if (historial.length === 0) {
+    contenedor.innerHTML =
+      '<p class="historial-vacio">Sin ventas registradas todavía.</p>';
+    return;
+  }
+
+  // Mostrar las ventas de la más reciente a la más antigua
+  [...historial].reverse().forEach((venta) => {
+    const card = document.createElement("div");
+    card.className = "venta-card";
+
+    // Generar el texto de los productos (ej: "Manzana x2 · Banana x1")
+    const itemsTexto = venta.items
+      .map(item => `${item.producto} x${item.cantidad}`)
+      .join(" · ");
+
+    // Construir el contenido de la tarjeta
+    card.innerHTML = `
+      <div class="venta-fecha">🕐 ${venta.fecha}</div>
+      <div class="venta-items">${itemsTexto}</div>
+      <div class="venta-total">Total: ${venta.total}</div>
+      <button class="btn-little btn-warning" onclick="borrarVenta(${venta.id})">✕ Borrar esta venta</button>
+    `;
+
+    contenedor.appendChild(card);
+  });
+};
+
+function borrarVenta(id) {
+  let historial = JSON.parse(localStorage.getItem("ventas") || "[]");
+  historial = historial.filter((v) => v.id !== id);
+  localStorage.setItem("ventas", JSON.stringify(historial));
+  cargarHistorial();
+}
+
 // Inicializar la página
 document.addEventListener("DOMContentLoaded", () => {
   cargarProductos();
   actualizarTabla();
+  cargarHistorial();
 });

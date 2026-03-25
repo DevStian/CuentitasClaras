@@ -32,7 +32,7 @@
         </main>
         <footer>
           <span>Total: </span> <span id="Total">$0.00</span>
-          <button class="btn btn-secondary">Guardar</button>
+          <button class="btn btn-secondary" onclick="GuardarVenta()">Guardar</button>
           <button class="btn btn-warning" onclick="limpiarCarrito()">
             Limpiar
           </button>
@@ -44,15 +44,9 @@
           <!-- Aquí se cargarán los productos -->
         </main>
       </section>
-      <section id="Historial" class="vista">
+      <section id="Historial" class="vista no-visible">
         <h2>Historial de Ventas</h2>
         <main id="ListaHistorial">
-          <div>
-            <span>19/03/2026, 10:21:46</span>
-            <p>Box 1 Campeon Gourmet x1 - Pizza x1 - Pop x1 - Papas tubo x1</p>
-            <p>Total: $ 3860</p>
-            <button class="btn-little btn-warning"> X Borrar esta venta</button>
-          </div>
         </main>
         <footer>
           <button class="btn btn-warning" onclick="">Borrar todo el Historial</button>
@@ -60,7 +54,7 @@
       </section>
     </div>
     <script src="scripts/lista_productos.js"></script>
-    <script src="scripts/logic_tabs_buttons.js"></script>
     <script src="scripts/logica_carrito.js"></script>
+    <script src="scripts/logic_tabs_buttons.js"></script>
   </body>
 </html>
