@@ -2,26 +2,49 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="css/base.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <!-- Favicon personalizado con carrito -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232d5a2c' rx='20'/%3E%3Ctext x='50' y='70' font-size='55' font-weight='bold' text-anchor='middle' fill='white' font-family='monospace'%3ECC%3C/text%3E%3C/svg%3E"
+    />
+    <title>Scrollable Sections | Fixed Layout</title>
+    <link rel="stylesheet" href="css/base_2.0.css" />
   </head>
   <body>
-    <header id="Menu">
-      <button class="tab-btn" data-target="inicio" href="/Version.html">Inicio</button>
-      <button class="tab-btn active" data-target="cuentas">Cuentas</button>
-      <button class="tab-btn" data-target="historial">Historial</button>
+    <header>
+      <button class="btn-less selected">Inicio</button>
+      <button class="btn-less">Carrito</button>
+      <button class="btn-less">Historial</button>
     </header>
-    <div class="container">
-      <section id="Carrito" class="vista">
-        <h2>Pedido Actual</h2>
+    <main class="container-section">
+      <section id="Inicio" class="vista">
+        <h2>Cuentitas Claras</h2>
+        <main style="display: grid; place-items: center; text-align: center">
+          <div>
+            <h1>Bienvenido/a!</h1>
+            <p>Cuentitas Claras Acá no te equivocas!</p>
+          </div>
+        </main>
+        <footer>
+          <p>
+            <a href="https://github.com/DevStian">Desarrollado por DevStian</a>
+          </p>
+        </footer>
+      </section>
+      <section id="Carrito" class="non-visible vista">
+        <h2>Carrito</h2>
         <main>
           <table class="tabla-carrito" id="tabla-carrito">
             <thead>
               <tr>
                 <th>Producto</th>
-                <th>Cantidad</th>
                 <th>Precio</th>
+                <th>Cantidad</th>
                 <th>Subtotal</th>
               </tr>
             </thead>
@@ -31,30 +54,50 @@
           </table>
         </main>
         <footer>
-          <span>Total: </span> <span id="Total">$0.00</span>
-          <button class="btn btn-secondary" onclick="GuardarVenta()">Guardar</button>
-          <button class="btn btn-warning" onclick="limpiarCarrito()">
+          <p>Total : <span id="TotalCarrito">$1450.0</span></p>
+          <button class="btn-little btn-secondary" onclick="guardarCarrito()">
+            Guardar
+          </button>
+          <button class="btn-little btn-warning" onclick="limpiarTabla()">
             Limpiar
           </button>
         </footer>
       </section>
-      <section id="Productos" class="vista">
-        <h2>Productos</h2>
-        <main id="productos-lista">
-          <!-- Aquí se cargarán los productos -->
-        </main>
+
+      <!-- SECTION 2: contenido corto, pero main conserva scroll si fuese necesario (sin expandir) -->
+      <section id="Lista-Productos" class="non-visible vista">
+        <h2>Lista Productos</h2>
+        <main></main>
       </section>
-      <section id="Historial" class="vista no-visible">
-        <h2>Historial de Ventas</h2>
-        <main id="ListaHistorial">
-        </main>
+
+      <section id="Historial" class="non-visible vista">
+        <h2>Historial</h2>
+        <main>asdasd</main>
         <footer>
-          <button class="btn btn-warning" onclick="">Borrar todo el Historial</button>
+          <p>Para Borrar Historial</p>
+          <button class="btn btn-warning" onclick="limpiarTODO()">
+            Borrar
+          </button>
         </footer>
       </section>
-    </div>
-    <script src="scripts/lista_productos.js"></script>
-    <script src="scripts/logica_carrito.js"></script>
-    <script src="scripts/logic_tabs_buttons.js"></script>
+    </main>
+    <script src="scripts/modulo_lista_productos.js"></script>
+    <script src="scripts/modulo_carrito.js"></script>
+    <script src="scripts/modulo_historial.js"></script>
+    <script src="scripts/modulo_tab_buttons.js"></script>
+    <script>
+      // Inicializar después de que el DOM esté cargado
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("🚀 DOM cargado - Inicializando");
+
+        // Limpiar tabla por las dudas
+        // limpiarTabla();
+
+        // Agregar productos a la lista
+        agregarElementoALista();
+        cargarHistorial();
+        console.log("✅ Aplicación inicializada");
+      });
+    </script>
   </body>
 </html>
