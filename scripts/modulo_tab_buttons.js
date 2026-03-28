@@ -11,6 +11,7 @@ buttons.forEach((button) => {
     // // Activar el botón clicado
     button.classList.add("selected");
     if (button.textContent == "Carrito") {
+      agregarElementoALista();
       document.getElementById("Carrito").classList.remove("non-visible");
       document
         .getElementById("Lista-Productos")

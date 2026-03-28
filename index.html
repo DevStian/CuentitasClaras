@@ -74,9 +74,12 @@
         <h2>Historial</h2>
         <main>asdasd</main>
         <footer>
-          <p>Para Borrar Historial</p>
+          <div id="TotalVentas">
+            <p>Total de Ventas</p>
+            <p class="ponerAqui">$140324.0</p>
+          </div>
           <button class="btn btn-warning" onclick="limpiarTODO()">
-            Borrar
+            Borrar Historial
           </button>
         </footer>
       </section>
@@ -90,13 +93,12 @@
       document.addEventListener("DOMContentLoaded", function () {
         console.log("🚀 DOM cargado - Inicializando");
 
-        // Limpiar tabla por las dudas
-        // limpiarTabla();
-
-        // Agregar productos a la lista
-        agregarElementoALista();
-        cargarHistorial();
-        console.log("✅ Aplicación inicializada");
+        cargarProductos().then((p) => {
+          productos = p;
+          cargarHistorial();
+          actualizarTotalCarrito();
+          console.log("✅ Aplicación inicializada");
+        });
       });
     </script>
   </body>
